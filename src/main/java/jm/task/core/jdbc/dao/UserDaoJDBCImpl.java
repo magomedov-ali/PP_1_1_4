@@ -62,8 +62,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         final String SAVE = "INSERT INTO users (name, lastname, age) VALUES (?,?,?);";
 
-        try (Statement statement = connection.createStatement();
-             PreparedStatement preparedStatement = connection.prepareStatement(SAVE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SAVE)) {
 
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
@@ -71,15 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
             preparedStatement.executeUpdate();
 
-            ResultSet resultSet = statement.executeQuery("SELECT LAST_INSERT_ID();");
-
-            User user = new User(name, lastName, age);
-
-            if (resultSet.next()) {
-                user.setAge(resultSet.getByte(1));
-            }
-
-            System.out.println("User with the name - " + user.getName() +
+            System.out.println("User with the name - " + name +
                     " was added to database");
 
         } catch (SQLException e) {
